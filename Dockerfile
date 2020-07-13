@@ -21,7 +21,7 @@ WORKDIR /workspace
 RUN mvn package
 RUN java -Djarmode=layertools -jar target/*.jar extract
 
-FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+FROM gcr.io/distroless/java:11
 WORKDIR /workspace
 ENV SPRING_PROFILES_ACTIVE=
 
@@ -31,4 +31,4 @@ COPY --from=build workspace/snapshot-dependencies/ ./
 COPY --from=build workspace/application/ ./
 USER 1000
 
-ENTRYPOINT ["java","--enable-preview", "org.springframework.boot.loader.JarLauncher"]
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
